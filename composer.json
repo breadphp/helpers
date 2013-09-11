@@ -1,0 +1,28 @@
+{
+	"name" : "bread/helpers",
+	"description" : "Bread helpers libreary",
+	"type" : "library",
+	"authors" : [{
+			"name" : "Giovanni Lovato",
+			"email" : "heruan@aldu.net"
+		}
+	],
+	"keywords" : [
+		"bread",
+		"helpers",
+		"json",
+		"xml",
+		"html"
+	],
+	"license" : [
+		"CC-BY-3.0"
+	],
+	"require" : {
+		"php" : ">=5.5"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"Bread\\Helpers" : "src"
+		}
+	}
+}

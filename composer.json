@@ -14,6 +14,7 @@
 		"xml",
 		"html"
 	],
+	"homepage" : "https://github.com/breadphp/helpers",
 	"license" : [
 		"CC-BY-3.0"
 	],

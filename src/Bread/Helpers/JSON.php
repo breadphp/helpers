@@ -8,7 +8,7 @@ class JSON
 {
     public static function encode($target)
     {
-        $json = json_encode($target);
+        $json = json_encode($target, JSON_PRETTY_PRINT);
         switch (json_last_error()) {
           case JSON_ERROR_NONE:
               return $json;

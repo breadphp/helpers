@@ -46,5 +46,5 @@ interface Node extends DOM\Interfaces\Node
      * Get the HTML contents of the first element in the set of matched elements
      * or set the HTML contents of every matched element.
      */
-    public function html();
+    public function html($html);
 }

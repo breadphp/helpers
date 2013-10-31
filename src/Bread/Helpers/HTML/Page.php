@@ -29,9 +29,7 @@ class Page extends DOM\Document
         if ($html) {
             if ($path) {
                 $filename = $path . $html;
-                if (file_exists($filename)) {
-                    $html = $filename;
-                }
+                $html = $filename;
             }
             $this->load($html);
         } else {
@@ -66,7 +64,7 @@ class Page extends DOM\Document
         return new Node($this, $nodes);
     }
 
-    public function create($name, $value = null, $attributes = array())
+    public function create($name, $value = null, $attributes = array(), $namespace = null)
     {
         $classes = explode('.', $name);
         $name = array_shift($classes);
@@ -103,7 +101,11 @@ class Page extends DOM\Document
     public function load($filename, $options = LIBXML_NOXMLDECL)
     {
         libxml_use_internal_errors(true);
-        $this->document->loadHTMLFile($filename);
+        if (file_exists($filename)) {
+            $this->document->loadHTMLFile($filename);
+        } else {
+            $this->document->loadHTML($filename);
+        }
         $this->xpath = new DOMXPath($this->document);
         $this->root = new Node($this, $this->document->documentElement);
         libxml_clear_errors();

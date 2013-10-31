@@ -131,6 +131,11 @@ class Node implements Interfaces\Node
     {
         return count($this->nodes);
     }
+    
+    public function parent()
+    {
+        return new Node($this->document, $this->nodes[0]->parentNode);
+    }
 
     /**
      * Insert content, specified by the parameter, after each element in the set
@@ -172,6 +177,9 @@ class Node implements Interfaces\Node
         }
         foreach ($this->nodes as $i => $node) {
             foreach ($content->nodes as $n) {
+                if ($n->ownerDocument !== $node->ownerDocument) {
+                    $n = $node->ownerDocument->importNode($n, true);
+                }
                 if ($i) {
                     $n = $n->cloneNode(true);
                 }

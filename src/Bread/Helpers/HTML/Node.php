@@ -47,14 +47,27 @@ class Node extends DOM\Node implements Interfaces\Node
         }
     }
 
-    public function nbsp($count = 1)
+    public function parent()
     {
-        for ($i = 0; $i < $count; $i++) {
-            $this->appendText(' ');
-        }
-        return $this;
+        return new Node($this->document, $this->nodes[0]->parentNode);
     }
-
+    
+    public function siblings()
+    {
+        $siblings = array();
+        $self = $this->nodes[0];
+        foreach ($self->parentNode->childNodes as $sibling) {
+            if ($sibling->nodeType !== XML_ELEMENT_NODE) {
+                continue;
+            }
+            if ($self === $sibling) {
+                continue;
+            }
+            $siblings[] = $sibling;
+        }
+        return new Node($this->document, $siblings);
+    }
+    
     public function data($name, $value = null)
     {
         if (is_array($name)) {
@@ -132,8 +145,16 @@ class Node extends DOM\Node implements Interfaces\Node
      * Get the HTML contents of the first element in the set of matched elements
      * or set the HTML contents of every matched element.
      */
-    public function html()
+    public function html($html)
     {
+        if (file_exists($html)) {
+            $id = uniqid('wrapper');
+            $wrapper = sprintf('<div id="%s">%s</div>', $id, file_get_contents($html));
+            $fragment = new Page($wrapper);
+            foreach ($fragment(sprintf('#%s', $id)) as $node) {
+                $this->append($node);
+            }
+        }
         return;
     }
 
@@ -146,7 +167,11 @@ class Node extends DOM\Node implements Interfaces\Node
     protected function setClasses($node, $array)
     {
         $class = implode(' ', array_unique($array));
-        $node->setAttribute('class', $class);
+        if ($class) {
+            $node->setAttribute('class', $class);
+        } elseif ($node->hasAttribute('class')) {
+            $node->removeAttribute('class');
+        }
     }
 
     public function query($query)

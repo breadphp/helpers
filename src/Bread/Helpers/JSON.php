@@ -6,7 +6,7 @@ use Exception;
 class JSON
 {
 
-    public static function encode($target, $properties = array())
+    public static function encode($target, $properties = array(), $append = array())
     {
         if ($properties) {
             $obj = array();
@@ -26,6 +26,11 @@ class JSON
             $json = json_encode($obj, JSON_PRETTY_PRINT);
         } else {
             $json = json_encode($target, JSON_PRETTY_PRINT);
+            $properties = json_decode($json, true);
+            foreach ($append as $key => $value) {
+                $properties[$key] = $value;
+            }
+            $json = json_encode($properties, JSON_PRETTY_PRINT);
         }
         switch (json_last_error()) {
             case JSON_ERROR_NONE:
